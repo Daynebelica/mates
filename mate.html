@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calcula la Media, Moda y Mediana</title>
+<style>
+  body {
+    background-color: skyblue;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  h1 {
+    color: black;
+  }
+  table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 80%;
+    background-color: white;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid black;
+  }
+  th {
+    background-color: #ccc;
+  }
+</style>
+</head>
+<body>
+<h1>Estadísticas de una Serie de Números</h1>
+<form id="numeroForm">
+  <label for="numeros">Para saber la media, mediana y moda, ingresa la serie de numeros separados por comas:</label>
+  <input type="text" id="numeros" name="numeros">
+  <input type="button" value="Calcular" onclick="calcularEstadisticas()">
+</form>
+<div id="resultados"></div>
+
+<script>
+function calcularEstadisticas() {
+  var numerosInput = document.getElementById('numeros').value;
+  var numerosArray = numerosInput.split(',').map(Number);
+  
+  var media = calcularMedia(numerosArray);
+  var moda = calcularModa(numerosArray);
+  var mediana = calcularMediana(numerosArray);
+  
+  var resultadosDiv = document.getElementById('resultados');
+  resultadosDiv.innerHTML = `
+    <table>
+      <tr>
+        <th>Medida</th>
+        <th>Valor</th>
+      </tr>
+      <tr>
+        <td>Media</td>
+        <td>${media}</td>
+      </tr>
+      <tr>
+        <td>Moda</td>
+        <td>${moda}</td>
+      </tr>
+      <tr>
+        <td>Mediana</td>
+        <td>${mediana}</td>
+      </tr>
+    </table>
+  `;
+}
+
+function calcularMedia(array) {
+  var suma = array.reduce((a, b) => a + b, 0);
+  return (suma / array.length).toFixed(2);
+}
+
+function calcularModa(array) {
+  var counts = {};
+  array.forEach(num => {
+    counts[num] = (counts[num] || 0) + 1;
+  });
+  var maxCount = Math.max(...Object.values(counts));
+  return Object.keys(counts).find(key => counts[key] === maxCount);
+}
+
+function calcularMediana(array) {
+  var sortedArray = array.slice().sort((a, b) => a - b);
+  var middleIndex = Math.floor(sortedArray.length / 2);
+  if (sortedArray.length % 2 === 0) {
+    return ((sortedArray[middleIndex - 1] + sortedArray[middleIndex]) / 2).toFixed(2);
+  } else {
+    return sortedArray[middleIndex].toFixed(2);
+  }
+}
+</script>
+</body>
+</html>
+
+
